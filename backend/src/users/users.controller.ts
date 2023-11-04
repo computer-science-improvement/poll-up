@@ -1,12 +1,22 @@
-import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post,} from '@nestjs/common';
-import {UsersService} from './users.service';
-import {CreateUserDto} from './dto/create-user.dto';
-import {UpdateUserDto} from './dto/update-user.dto';
-import {ApiTags} from '@nestjs/swagger';
-import {User} from './entities/user.entity';
-import {NullableType} from '../utils/types/nullable.type';
-import {CreateAnswerDto} from "./dto/create-answer.dto";
-import {UserQuestion} from "./entities/user-question.entity";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { User } from './entities/user.entity';
+import { NullableType } from '../utils/types/nullable.type';
+import { CreateAnswerDto } from './dto/create-answer.dto';
+import { UserQuestion } from './entities/user-question.entity';
 
 @ApiTags('Users')
 @Controller({
@@ -23,8 +33,17 @@ export class UsersController {
 
   @Post(':id/answer')
   @HttpCode(HttpStatus.CREATED)
-  createAnswer(@Param('id') id: string, @Body() createProfileDto: CreateAnswerDto): Promise<UserQuestion> {
+  createAnswer(
+    @Param('id') id: string,
+    @Body() createProfileDto: CreateAnswerDto,
+  ): Promise<UserQuestion> {
     return this.usersService.createAnswer(id, createProfileDto);
+  }
+
+  @Get(':id/question')
+  @HttpCode(HttpStatus.CREATED)
+  getNextQuestion(@Param('id') id: string): Promise<string> {
+    return this.usersService.getNextQuestion(id);
   }
 
   @Get(':id')
@@ -32,7 +51,6 @@ export class UsersController {
   findOne(@Param('id') id: string): Promise<NullableType<User>> {
     return this.usersService.findOne({ id: id });
   }
-
 
   @Patch(':id')
   @HttpCode(HttpStatus.OK)

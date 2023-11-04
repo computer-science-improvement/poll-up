@@ -1,8 +1,12 @@
-import {ClassSerializerInterceptor, ValidationPipe, VersioningType,} from '@nestjs/common';
-import {NestFactory, Reflector} from '@nestjs/core';
-import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
-import {useContainer} from 'class-validator';
-import {AppModule} from './app.module';
+import {
+  ClassSerializerInterceptor,
+  ValidationPipe,
+  VersioningType,
+} from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { useContainer } from 'class-validator';
+import { AppModule } from './app.module';
 import validationOptions from './utils/validation-options';
 
 async function bootstrap() {
@@ -10,9 +14,7 @@ async function bootstrap() {
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   app.enableShutdownHooks();
-  app.setGlobalPrefix(
-    'api'
-  );
+  app.setGlobalPrefix('api');
   app.enableVersioning({
     type: VersioningType.URI,
   });
@@ -29,6 +31,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('docs', app, document);
 
-  await app.listen(3000);
+  await app.listen(3001);
 }
 void bootstrap();

@@ -5,10 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { IsExist } from 'src/utils/validators/is-exists.validator';
 import { IsNotExist } from 'src/utils/validators/is-not-exists.validator';
-import {UserQuestion} from "./entities/user-question.entity";
+import { UserQuestion } from './entities/user-question.entity';
+import { OpenaiModule } from '../openai/openai.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, UserQuestion])],
+  imports: [TypeOrmModule.forFeature([User, UserQuestion]), OpenaiModule],
   controllers: [UsersController],
   providers: [IsExist, IsNotExist, UsersService],
   exports: [UsersService],
