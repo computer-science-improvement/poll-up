@@ -1,4 +1,7 @@
 import { Button } from '@nextui-org/react';
+import Link from 'next/link';
+import { ROUTES } from '@/lib/routes';
+import Image from 'next/image';
 
 const navigation = [
   { name: 'Product', href: '#' },
@@ -26,7 +29,12 @@ export default function Home() {
               relationships, share experiences, and create lasting memories.
             </p>
             <div className='mt-10 flex items-center gap-x-6'>
-              <Button color='primary' variant='shadow'>
+              <Button
+                as={Link}
+                color='primary'
+                variant='shadow'
+                href={ROUTES.PULL_UP}
+              >
                 Get started
               </Button>
               <Button color='primary' variant='light'>
@@ -34,10 +42,13 @@ export default function Home() {
               </Button>
             </div>
           </div>
-          <img
+          <Image
+            priority
             src='https://images.unsplash.com/photo-1567532900872-f4e906cbf06a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1280&q=80'
             alt=''
-            className='mt-10 aspect-[6/5] w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 lg:max-w-none xl:row-span-2 xl:row-end-2 xl:mt-36'
+            className='mt-10 w-full max-w-lg rounded-2xl object-cover sm:mt-16 lg:mt-0 lg:max-w-none xl:row-span-2 xl:row-end-2 xl:mt-36'
+            width={512}
+            height={340}
           />
         </div>
       </div>
