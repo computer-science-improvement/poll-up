@@ -30,7 +30,12 @@ export default function Nav() {
       </NavbarContent>
       <NavbarContent justify='end'>
         <NavbarItem>
-          <Button as={Link} color='primary' href={ROUTES.pullUp} variant='flat'>
+          <Button
+            as={Link}
+            color='primary'
+            href={ROUTES.pullUp}
+            variant='shadow'
+          >
             Pull Up
           </Button>
         </NavbarItem>

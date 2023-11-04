@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
 import Nav from '@/components/nav';
-import Footer from "@/components/footer";
+import Footer from '@/components/footer';
 import { Providers } from './providers';
 
 import './globals.css';
@@ -26,7 +26,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body className={inter.className}>
         <Providers>
           <Nav />
-          {children}
+          <main>{children}</main>
           <Footer />
         </Providers>
       </body>
