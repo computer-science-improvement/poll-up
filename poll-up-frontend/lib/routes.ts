@@ -1,5 +1,5 @@
 export const ROUTES = {
-  home: '/',
-  magicSearch: '/magic-search',
-  pullUp: '/pull-up',
+  HOME: '/',
+  MAGIC_SEARCH: '/magic-search',
+  PULL_UP: '/pull-up',
 } as const;

@@ -9,6 +9,7 @@ import {
 } from '@nextui-org/react';
 
 import { ROUTES } from '@/lib/routes';
+import MagicSearch from '@/components/magic-search';
 
 export default function Nav() {
   return (
@@ -18,12 +19,10 @@ export default function Nav() {
       </NavbarBrand>
       <NavbarContent className='hidden sm:flex gap-4' justify='center'>
         <NavbarItem>
-          <Link color='foreground' href={ROUTES.magicSearch}>
-            Magic Search
-          </Link>
+          <MagicSearch />
         </NavbarItem>
         <NavbarItem>
-          <Link color='foreground' href={ROUTES.home}>
+          <Link color='foreground' href={ROUTES.HOME}>
             Game
           </Link>
         </NavbarItem>
@@ -33,7 +32,7 @@ export default function Nav() {
           <Button
             as={Link}
             color='primary'
-            href={ROUTES.pullUp}
+            href={ROUTES.PULL_UP}
             variant='shadow'
           >
             Pull Up

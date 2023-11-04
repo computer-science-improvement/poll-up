@@ -21,7 +21,7 @@ export default function Home() {
           </h1>
           <div className='mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1'>
             <p className='text-lg leading-8 text-gray-600'>
-              We're on a mission to transform the way people connect with each
+              We are on a mission to transform the way people connect with each
               other, offering innovative and exciting ways to build meaningful
               relationships, share experiences, and create lasting memories.
             </p>
