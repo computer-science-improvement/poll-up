@@ -99,6 +99,7 @@ const MagicSearch = () => {
               </ModalHeader>
               <ModalBody>
                 <Textarea
+                  autoFocus
                   onClick={onOpen}
                   classNames={{
                     base: 'max-w-full',
