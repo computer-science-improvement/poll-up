@@ -5,6 +5,7 @@ import { QUESTIONS } from '@/lib/questions';
 import { useQuery } from '@tanstack/react-query';
 import { UserService } from '@/services/user';
 import { useUser } from '@/providers/user-provider';
+import { QuestionSkeleton } from '@/components/question-skeleton';
 
 type PullUpProps = { params: { id: string } };
 
@@ -56,12 +57,15 @@ export default function PullUp({ params }: PullUpProps) {
         <Steps id={id} isAdditionalStep={isAdditionalStep} />
       </div>
       <div className='flex-1 flex justify-center'>
-        {_question && !isLoading && (
+        {_question && !isLoading ? (
           <Question
+            profile={myProfile}
             id={id}
             data={_question}
             isAdditionalStep={isAdditionalStep}
           />
+        ) : (
+          <QuestionSkeleton />
         )}
       </div>
     </div>

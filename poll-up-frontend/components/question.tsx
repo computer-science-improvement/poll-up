@@ -4,7 +4,17 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
-import { Button, Select, SelectItem } from '@nextui-org/react';
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Progress,
+  Select,
+  SelectItem,
+} from '@nextui-org/react';
 import { Textarea } from '@nextui-org/input';
 
 import { Answer, QuestionMeta, QUESTIONS } from '@/lib/questions';
@@ -12,6 +22,8 @@ import { BASE_URL } from '@/lib/api';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { UserService } from '@/services/user';
 import { useUser } from '@/providers/user-provider';
+import React, { useState } from 'react';
+import { MagicSearchService } from '@/services/magic-search';
 
 type QuestionProps = {
   id: number;
@@ -24,6 +36,7 @@ type QuestionProps = {
     meta?: QuestionMeta;
     patchField?: string;
   };
+  profile: any;
 };
 
 type QuestionFormValues = {
@@ -34,7 +47,10 @@ export default function Question({
   id,
   data: question,
   isAdditionalStep,
+  profile,
 }: QuestionProps) {
+  const [isOpen, onOpenChange] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
   const router = useRouter();
   const user = useUser();
 
@@ -54,7 +70,8 @@ export default function Question({
   const finalize = useMutation({
     mutationFn: UserService.finalize,
     onSuccess: () => {
-      router.push('/bio');
+      setIsFinished(true);
+      onOpenChange(true);
     },
   });
 
@@ -77,6 +94,12 @@ export default function Question({
   const goToNextQuestion = () => {
     router.push(`/pull-up/${nextId}`);
   };
+
+  const query = useQuery({
+    queryKey: ['get-user-by-id', String(user?.id)],
+    queryFn: () => MagicSearchService.getBio(String(user?.id)),
+    enabled: !!String(user?.id) && isOpen,
+  });
 
   const onSubmit = async (data: QuestionFormValues) => {
     switch (question.meta) {
@@ -108,6 +131,8 @@ export default function Question({
     }
   };
 
+  const bio = query?.data?.data?.data ?? '';
+
   const isInvalid = formState.errors.answer;
 
   return (
@@ -120,12 +145,14 @@ export default function Question({
         width={200}
         height={120}
       />
-      <p className='text-2xl font-semibold text-foreground mb-2'>
+      <p className='text-2xl font-semibold text-foreground mb-3'>
         {question.title}
       </p>
-      <span className='text-foreground/60 inline-block mb-6'>
-        {question.description}
-      </span>
+      {question.description && (
+        <span className='text-foreground/60 inline-block mb-6'>
+          {question.description}
+        </span>
+      )}
 
       <div className='w-full flex flex-col'>
         {question.type === 'text' && (
@@ -157,25 +184,61 @@ export default function Question({
           </Select>
         )}
 
-        <Button
-          type='submit'
-          className='self-end'
-          color='primary'
-          variant='shadow'
-        >
-          Next question
-        </Button>
-        {isAdditionalStep && (
+        <div className='flex gap-4 justify-end'>
           <Button
-            type='button'
-            onClick={handleFinalize}
+            disabled={isFinished}
+            type='submit'
             className='self-end'
             color='primary'
             variant='shadow'
           >
-            Finish
+            Next question
           </Button>
-        )}
+          {isAdditionalStep && (
+            <Button
+              disabled={isFinished}
+              type='button'
+              onClick={handleFinalize}
+              className='self-end'
+              color='secondary'
+              variant='shadow'
+            >
+              Finish
+            </Button>
+          )}
+        </div>
+
+        <Modal
+          backdrop='opaque'
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          classNames={{
+            backdrop:
+              'bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20',
+          }}
+          closeButton={<></>}
+        >
+          <ModalContent className='max-w-[800px]'>
+            {() => (
+              <>
+                <ModalHeader className='flex flex-col gap-1'>{`Bio by: ${profile?.data?.name}`}</ModalHeader>
+                <ModalBody>
+                  {query.isLoading ? (
+                    <Progress
+                      size='sm'
+                      isIndeterminate
+                      aria-label='Loading...'
+                      className='max-w-[800px]'
+                    />
+                  ) : (
+                    <div>{bio}</div>
+                  )}
+                </ModalBody>
+                <ModalFooter></ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </div>
     </form>
   );
