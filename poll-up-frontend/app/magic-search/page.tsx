@@ -2,7 +2,7 @@
 import UserCard from '@/components/user-card';
 import { MagicSearchService } from '@/services/magic-search';
 import { useQuery } from '@tanstack/react-query';
-import { Progress } from '@nextui-org/react';
+import { Progress, Divider } from '@nextui-org/react';
 import React from 'react';
 
 type MagicSearchPageProps = {
@@ -26,36 +26,41 @@ export default function MagicSearchPage({
   });
 
   return (
-    <div className='mx-auto max-w-5xl px-6 py-12 flex lg:px-8 gap-4 flex-wrap'>
-      {/*<MagicSearch />*/}
-      {query.isLoading ? (
-        <Progress
-          size='sm'
-          isIndeterminate
-          aria-label='Loading...'
-          className='max-w-[100%]'
-        />
-      ) : (
-        <>
-          {!!users.length ? (
-            <>
-              {users.map((user: any) => {
-                return (
-                  <UserCard
-                    id={user.id}
-                    key={user.id}
-                    name={user.name}
-                    reason={user.reason}
-                  />
-                );
-              })}
-            </>
-          ) : (
-            <div>No Data</div>
-          )}
-        </>
-      )}
-      {/*<DonutChart />*/}
+    <div className='mx-auto max-w-5xl'>
+      <div className='py-4'>
+        <p className='px-[32px] text-[32px]'>{prompt}</p>
+      </div>
+      <div className='mx-auto max-w-5xl px-6 flex lg:px-8 gap-4 flex-wrap'>
+        {/*<MagicSearch />*/}
+        {query.isLoading ? (
+          <Progress
+            size='sm'
+            isIndeterminate
+            aria-label='Loading...'
+            className='max-w-[100%]'
+          />
+        ) : (
+          <>
+            {!!users.length ? (
+              <>
+                {users.map((user: any) => {
+                  return (
+                    <UserCard
+                      id={user.id}
+                      key={user.id}
+                      name={user.name}
+                      reason={user.reason}
+                    />
+                  );
+                })}
+              </>
+            ) : (
+              <div>No Data</div>
+            )}
+          </>
+        )}
+        {/*<DonutChart />*/}
+      </div>
     </div>
   );
 }

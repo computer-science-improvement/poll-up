@@ -30,7 +30,7 @@ const UserCard = (props: UserCardProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const query = useQuery({
-    queryKey: ['get-user-by-id', id],
+    queryKey: ['get-user-bio-by-id', id],
     queryFn: () => MagicSearchService.getBio(id),
     enabled: !!id && isOpen,
   });
@@ -39,7 +39,7 @@ const UserCard = (props: UserCardProps) => {
 
   return (
     <>
-      <Card className='min-w-[340px] max-w-[440px]'>
+      <Card className='w-[400px]'>
         <CardHeader className='justify-between'>
           <div className='flex gap-5' onClick={onOpen}>
             <Avatar isBordered radius='full' size='md' src='' />
@@ -79,7 +79,7 @@ const UserCard = (props: UserCardProps) => {
                     className='max-w-[800px]'
                   />
                 ) : (
-                  <div>{bio}</div>
+                  <pre>{bio}</pre>
                 )}
               </ModalBody>
               <ModalFooter></ModalFooter>
