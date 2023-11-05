@@ -7,7 +7,11 @@ import { useForm } from 'react-hook-form';
 import { Button, Select, SelectItem } from '@nextui-org/react';
 import { Textarea } from '@nextui-org/input';
 
-import { Answer, QUESTIONS } from '@/lib/questions';
+import { Answer, QuestionMeta, QUESTIONS } from '@/lib/questions';
+import { BASE_URL } from '@/lib/api';
+import { useMutation } from '@tanstack/react-query';
+import { UserService } from '@/services/user';
+import { useUser } from '@/providers/user-provider';
 
 type QuestionProps = {
   id: number;
@@ -15,6 +19,7 @@ type QuestionProps = {
   description?: string;
   type: 'text' | 'select';
   answers?: Answer[];
+  meta?: QuestionMeta;
 };
 
 type QuestionFormValues = {
@@ -27,8 +32,20 @@ export default function Question({
   description,
   type,
   answers,
+  meta,
 }: QuestionProps) {
   const router = useRouter();
+  const user = useUser();
+
+  const initUser = useMutation({
+    mutationFn: UserService.init,
+    onSuccess: (data) => {
+      user?.setId(data.id);
+    },
+  });
+
+  console.log(user?.id);
+
   const { register, handleSubmit, formState } = useForm<QuestionFormValues>({
     defaultValues: {
       answer: '',
@@ -37,8 +54,14 @@ export default function Question({
 
   const nextId = QUESTIONS.length - 1 === id ? 0 : id + 1;
 
-  const onSubmit = (data: QuestionFormValues) => {
-    console.log(data.answer);
+  const onSubmit = async (data: QuestionFormValues) => {
+    switch (meta) {
+      case 'initial': {
+        await initUser.mutateAsync(data.answer);
+      }
+      default:
+        return null;
+    }
     router.push(`/pull-up/${nextId}`);
   };
 

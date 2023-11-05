@@ -26,6 +26,7 @@ export default function PullUp({ params }: PullUpProps) {
             type={question.type}
             title={question.title}
             description={question.description}
+            meta={question.meta}
           />
         )}
       </div>
