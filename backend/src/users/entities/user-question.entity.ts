@@ -1,11 +1,17 @@
 // Import necessary modules and decorators from TypeORM
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 
 // Import the User entity if you have it defined
 
 @Entity()
-export class UserQuestion {
+export class UserQuestion extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -14,6 +20,9 @@ export class UserQuestion {
 
   @Column()
   answer: string;
+
+  @Column({ nullable: true })
+  summary: string;
 
   // Define a many-to-one relationship with the User entity
   @ManyToOne(() => User, (user) => user.userQuestions)
