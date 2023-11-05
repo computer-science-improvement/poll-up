@@ -4,7 +4,7 @@ import { ReactNode, createContext, useContext, useState } from 'react';
 
 interface UserContextProps {
   id: string | null;
-  setId: (id: string) => void;
+  setId: (id: string | null) => void;
 }
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);

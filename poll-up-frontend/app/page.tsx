@@ -1,7 +1,10 @@
+'use client';
 import { Button } from '@nextui-org/react';
 import Link from 'next/link';
 import { ROUTES } from '@/lib/routes';
 import Image from 'next/image';
+import { useEffect } from 'react';
+import { useUser } from '@/providers/user-provider';
 
 const navigation = [
   { name: 'Product', href: '#' },
@@ -11,6 +14,12 @@ const navigation = [
 ];
 
 export default function Home() {
+  const user = useUser();
+
+  useEffect(() => {
+    user?.setId(null);
+  }, []);
+
   return (
     <div className='relative isolate overflow-hidden bg-gradient-to-b from-indigo-100/20 pt-14'>
       <div
