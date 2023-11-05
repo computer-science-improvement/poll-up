@@ -80,10 +80,10 @@ export default function Question({
       <Image
         className='mb-10'
         priority
-        src='/vercel.svg'
+        src='https://new-trainual-staging.s3.amazonaws.com/uploads/admin_account/logo/1/81456644-ab68-4706-89e2-2f559686c83d.png'
         alt='logo'
-        width={141}
-        height={64}
+        width={200}
+        height={120}
       />
       <p className='text-2xl font-semibold text-foreground mb-2'>{title}</p>
       <span className='text-foreground/60 inline-block mb-6'>
