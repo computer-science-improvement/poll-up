@@ -16,8 +16,6 @@ import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/lib/routes';
 import React, { useState, useEffect } from 'react';
 import { Kbd } from '@nextui-org/kbd';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { MagicSearchService } from '@/services/magic-search';
 
 export const useKeyboardShortcut = (callback: (e: KeyboardEvent) => void) => {
   useEffect(() => {
@@ -124,12 +122,12 @@ const MagicSearch = () => {
                   onChange={handleChangePrompt}
                 />
                 <Divider className='my-2' />
-                <Progress
-                  size='sm'
-                  isIndeterminate
-                  aria-label='Loading...'
-                  className='max-w-md'
-                />
+                {/*<Progress*/}
+                {/*  size='sm'*/}
+                {/*  isIndeterminate*/}
+                {/*  aria-label='Loading...'*/}
+                {/*  className='max-w-md'*/}
+                {/*/>*/}
               </ModalBody>
               <ModalFooter>
                 <Button color='danger' variant='light' onPress={onClose}>

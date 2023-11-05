@@ -2,6 +2,8 @@
 import UserCard from '@/components/user-card';
 import { MagicSearchService } from '@/services/magic-search';
 import { useQuery } from '@tanstack/react-query';
+import { Progress } from '@nextui-org/react';
+import React from 'react';
 
 type MagicSearchPageProps = {
   params: Record<string, string>;
@@ -19,16 +21,40 @@ export default function MagicSearchPage({
     enabled: !!prompt,
   });
 
-  const users = query.data?.data?.data?.users ?? [];
-
-  console.log();
+  const users = (query.data?.data?.data?.users ?? []).filter((result: any) => {
+    return !!result.percentage;
+  });
 
   return (
     <div className='mx-auto max-w-5xl px-6 py-12 flex lg:px-8 gap-4 flex-wrap'>
       {/*<MagicSearch />*/}
-      {users.map((user: any) => {
-        return <UserCard id={user.id} key={user.id} name={user.name} />;
-      })}
+      {query.isLoading ? (
+        <Progress
+          size='sm'
+          isIndeterminate
+          aria-label='Loading...'
+          className='max-w-[100%]'
+        />
+      ) : (
+        <>
+          {!!users.length ? (
+            <>
+              {users.map((user: any) => {
+                return (
+                  <UserCard
+                    id={user.id}
+                    key={user.id}
+                    name={user.name}
+                    reason={user.reason}
+                  />
+                );
+              })}
+            </>
+          ) : (
+            <div>No Data</div>
+          )}
+        </>
+      )}
       {/*<DonutChart />*/}
     </div>
   );
