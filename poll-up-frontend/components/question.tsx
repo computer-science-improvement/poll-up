@@ -1,8 +1,12 @@
 'use client';
-import Link from 'next/link';
+
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+
 import { Button, Select, SelectItem } from '@nextui-org/react';
 import { Textarea } from '@nextui-org/input';
+
 import { Answer, QUESTIONS } from '@/lib/questions';
 
 type QuestionProps = {
@@ -13,6 +17,10 @@ type QuestionProps = {
   answers?: Answer[];
 };
 
+type QuestionFormValues = {
+  answer: string;
+};
+
 export default function Question({
   id,
   title,
@@ -20,10 +28,24 @@ export default function Question({
   type,
   answers,
 }: QuestionProps) {
+  const router = useRouter();
+  const { register, handleSubmit, formState } = useForm<QuestionFormValues>({
+    defaultValues: {
+      answer: '',
+    },
+  });
+
   const nextId = QUESTIONS.length - 1 === id ? 0 : id + 1;
 
+  const onSubmit = (data: QuestionFormValues) => {
+    console.log(data.answer);
+    router.push(`/pull-up/${nextId}`);
+  };
+
+  const isInvalid = formState.errors.answer;
+
   return (
-    <div className='w-full max-w-md'>
+    <form onSubmit={handleSubmit(onSubmit)} className='w-full max-w-md'>
       <Image
         className='mb-10'
         priority
@@ -40,19 +62,24 @@ export default function Question({
       <div className='w-full flex flex-col'>
         {type === 'text' && (
           <Textarea
+            {...register('answer', { required: true })}
+            required
             variant='faded'
             label='Your Answer'
             placeholder='More passion, more power, more pull ups 🗿'
             className='mb-6 w-full'
+            isInvalid={!!isInvalid}
           />
         )}
 
         {type === 'select' && answers && (
           <Select
+            {...register('answer', { required: true })}
             variant='faded'
             label='Select'
             selectionMode='multiple'
             className='mb-6'
+            isInvalid={!!isInvalid}
           >
             {answers.map((animal) => (
               <SelectItem key={animal.value} value={animal.value}>
@@ -63,8 +90,7 @@ export default function Question({
         )}
 
         <Button
-          as={Link}
-          href={`${nextId}`}
+          type='submit'
           className='self-end'
           color='primary'
           variant='shadow'
@@ -72,6 +98,6 @@ export default function Question({
           Next question
         </Button>
       </div>
-    </div>
+    </form>
   );
 }

@@ -17,7 +17,8 @@
     "next": "14.0.1",
     "prettier": "^2.8.8",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.48.1"
   },
   "devDependencies": {
     "@types/node": "^20",
