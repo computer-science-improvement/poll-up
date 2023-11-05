@@ -16,6 +16,8 @@ import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/lib/routes';
 import React, { useState, useEffect } from 'react';
 import { Kbd } from '@nextui-org/kbd';
+import { useMutation } from '@tanstack/react-query';
+import { MagicSearchService } from '@/services/magic-search';
 
 export const useKeyboardShortcut = (callback: (e: KeyboardEvent) => void) => {
   useEffect(() => {
@@ -36,11 +38,19 @@ const MagicSearch = () => {
   const [prompt, setPrompt] = useState('');
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
+  const searchMutation = useMutation({
+    mutationFn: MagicSearchService.search,
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
+
   const handleClick = () => {
     const clenString = prompt?.replaceAll('\n', '');
     const searchParams = new URLSearchParams({ prompt: clenString });
     router.push(`${ROUTES.MAGIC_SEARCH}?${searchParams}`);
     onClose();
+    searchMutation.mutate(clenString);
   };
   const handleChangePrompt = (e: any) => {
     setPrompt(e.target.value);
