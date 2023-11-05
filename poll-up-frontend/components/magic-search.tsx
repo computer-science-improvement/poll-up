@@ -73,7 +73,7 @@ const MagicSearch = () => {
       <div onClick={onOpen} className=''>
         <Input
           classNames={{
-            base: 'max-w-full sm:max-w-[10rem] h-10',
+            base: 'max-w-full sm:max-w-md h-10',
             mainWrapper: 'h-full',
             input: 'text-small !cursor-pointer caret-transparent',
             inputWrapper:

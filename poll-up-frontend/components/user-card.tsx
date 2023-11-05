@@ -14,13 +14,13 @@ import {
 import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/card';
 import { useQuery } from '@tanstack/react-query';
 import { MagicSearchService } from '@/services/magic-search';
-import { Textarea } from '@nextui-org/input';
 import React from 'react';
 
 type UserCardProps = {
   id: string;
   name: string;
   reason: string;
+  percentage: string;
 };
 
 const UserCard = (props: UserCardProps) => {
@@ -30,16 +30,35 @@ const UserCard = (props: UserCardProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const query = useQuery({
-    queryKey: ['get-user-by-id', id],
+    queryKey: ['get-user-bio-by-id', id],
     queryFn: () => MagicSearchService.getBio(id),
     enabled: !!id && isOpen,
   });
 
   const bio = query?.data?.data?.data ?? '';
 
+  const getColorByPercentage = (percentage: string) => {
+    const percentageNumber = Number(percentage);
+    if (percentageNumber >= 90) {
+      return 'rgb(5, 41, 21)';
+    } else if (percentageNumber >= 80) {
+      return 'rgb(39, 39, 42)';
+    } else {
+      return 'rgb(98, 66, 14)';
+    }
+  };
+
+  const cardColor = getColorByPercentage(props.percentage);
+
   return (
     <>
-      <Card className='min-w-[340px] max-w-[440px]'>
+      <Card
+        isBlurred
+        className='w-[400px] bg-success-100'
+        style={{
+          backgroundColor: cardColor,
+        }}
+      >
         <CardHeader className='justify-between'>
           <div className='flex gap-5' onClick={onOpen}>
             <Avatar isBordered radius='full' size='md' src='' />
@@ -51,7 +70,7 @@ const UserCard = (props: UserCardProps) => {
             </div>
           </div>
         </CardHeader>
-        <CardBody className='px-3 py-0 text-small text-default-400 max-h-[400px]'>
+        <CardBody className='px-3 py-0 text-small text-default-600 max-h-[400px]'>
           <p>{reason}</p>
         </CardBody>
         <CardFooter className='gap-3'></CardFooter>
@@ -79,7 +98,7 @@ const UserCard = (props: UserCardProps) => {
                     className='max-w-[800px]'
                   />
                 ) : (
-                  <div>{bio}</div>
+                  <pre>{bio}</pre>
                 )}
               </ModalBody>
               <ModalFooter></ModalFooter>

@@ -23,11 +23,6 @@ export default function Nav() {
         <NavbarItem>
           <MagicSearch />
         </NavbarItem>
-        <NavbarItem>
-          <Link color='foreground' href={ROUTES.HOME}>
-            Game
-          </Link>
-        </NavbarItem>
       </NavbarContent>
       <NavbarContent justify='end'>
         <NavbarItem>
