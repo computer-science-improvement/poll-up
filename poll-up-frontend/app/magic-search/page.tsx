@@ -1,10 +1,7 @@
 'use client';
-import MagicSearch from '@/components/magic-search';
 import UserCard from '@/components/user-card';
-import DonutChart from '@/components/donut-chart';
 import { MagicSearchService } from '@/services/magic-search';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 
 type MagicSearchPageProps = {
   params: Record<string, string>;
@@ -22,12 +19,16 @@ export default function MagicSearchPage({
     enabled: !!prompt,
   });
 
-  console.log(query.data?.data?.data?.users);
+  const users = query.data?.data?.data?.users ?? [];
+
+  console.log();
 
   return (
-    <div className='mx-auto max-w-5xl px-6 py-12 flex lg:px-8'>
+    <div className='mx-auto max-w-5xl px-6 py-12 flex lg:px-8 gap-4 flex-wrap'>
       {/*<MagicSearch />*/}
-      <UserCard />
+      {users.map((user: any) => {
+        return <UserCard id={user.id} key={user.id} name={user.name} />;
+      })}
       {/*<DonutChart />*/}
     </div>
   );
