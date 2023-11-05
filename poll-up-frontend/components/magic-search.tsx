@@ -14,41 +14,73 @@ import {
 import { Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/lib/routes';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Kbd } from '@nextui-org/kbd';
+
+export const useKeyboardShortcut = (callback: (e: KeyboardEvent) => void) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      callback(event);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [callback]);
+};
 
 const MagicSearch = () => {
   const router = useRouter();
   const [prompt, setPrompt] = useState('');
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const handleChangePrompt = (e: any) => {
-    console.log(e.target.value);
     setPrompt(e.target.value);
   };
 
-  const handleClick = (onClose: any) => () => {
+  const onKeyOpen = (event: KeyboardEvent) => {
+    if (event.metaKey && event.key === 'k') {
+      onOpen();
+    }
+  };
+
+  const onKeyClose = (event: KeyboardEvent) => {
+    if (event.key === 'Esc') {
+      close();
+    }
+  };
+
+  useKeyboardShortcut(onKeyOpen);
+  useKeyboardShortcut(onKeyClose);
+  const handleClick = () => {
     const clenString = prompt?.replaceAll('\n', '');
     const searchParams = new URLSearchParams({ prompt: clenString });
     router.push(`${ROUTES.MAGIC_SEARCH}?${searchParams}`);
     onClose();
   };
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
-      <Input
-        onClick={onOpen}
-        classNames={{
-          base: 'max-w-full sm:max-w-[10rem] h-10',
-          mainWrapper: 'h-full',
-          input: 'text-small',
-          inputWrapper:
-            'h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20',
-        }}
-        placeholder='Get Secrets ...'
-        size='sm'
-        startContent={<Search />}
-        type='search'
-      />
+      <div onClick={onOpen}>
+        <Input
+          classNames={{
+            base: 'max-w-full sm:max-w-[10rem] h-10',
+            mainWrapper: 'h-full',
+            input: 'text-small',
+            inputWrapper:
+              'h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20',
+          }}
+          value=''
+          placeholder='Get Secrets ...'
+          size='sm'
+          startContent={<Search />}
+          endContent={<Kbd keys={['command']}>K</Kbd>}
+          type='search'
+        />
+      </div>
+
       <Modal
         backdrop='opaque'
         isOpen={isOpen}
@@ -67,6 +99,7 @@ const MagicSearch = () => {
               </ModalHeader>
               <ModalBody>
                 <Textarea
+                  autoFocus
                   onClick={onOpen}
                   classNames={{
                     base: 'max-w-full',
@@ -93,7 +126,7 @@ const MagicSearch = () => {
                 <Button color='danger' variant='light' onPress={onClose}>
                   Close
                 </Button>
-                <Button color='primary' onPress={handleClick(onClose)}>
+                <Button color='primary' onPress={handleClick}>
                   Search
                 </Button>
               </ModalFooter>
