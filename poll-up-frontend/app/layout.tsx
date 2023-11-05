@@ -23,7 +23,7 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang='en' className='light'>
-      <body className={inter.className}>
+      <body className={`${inter.className} antialiased`}>
         <Providers>
           <Nav />
           <main className='min-h-[calc(100vh-186px)]'>{children}</main>
