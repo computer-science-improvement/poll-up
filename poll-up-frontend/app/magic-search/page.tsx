@@ -46,6 +46,7 @@ export default function MagicSearchPage({
                     key={user.id}
                     name={user.name}
                     reason={user.reason}
+                    percentage={user.percentage}
                   />
                 );
               })}
