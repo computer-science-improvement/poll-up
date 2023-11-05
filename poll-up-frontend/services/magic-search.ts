@@ -11,4 +11,7 @@ export const MagicSearchService = {
       console.error(e);
     }
   },
+  getBio: async (id: string) => {
+    return await api.get(`users/${id}/bio`);
+  },
 };
