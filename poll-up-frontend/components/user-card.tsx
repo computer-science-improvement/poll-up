@@ -38,7 +38,8 @@ const UserCard = (props: UserCardProps) => {
   const bio = query?.data?.data?.data ?? '';
 
   const getColorByPercentage = (percentage: string) => {
-    const percentageNumber = Number(percentage);
+    const preparePercent = String(percentage).replace('%', '');
+    const percentageNumber = Number(preparePercent);
     if (percentageNumber >= 90) {
       return 'rgb(5, 41, 21)';
     } else if (percentageNumber >= 80) {
