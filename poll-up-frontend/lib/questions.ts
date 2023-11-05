@@ -57,7 +57,7 @@ export const QUESTIONS: QuestionType[] = [
       { value: 'DevOps', label: 'DevOps' },
       { value: 'Full Stack Engineer', label: 'Full Stack Engineer' },
       { value: 'Mobile Developer', label: 'Mobile Developer' },
-      { value: 'Designed', label: 'Designed' },
+      { value: 'Designer', label: 'Designer' },
       { value: 'Project Manger', label: 'Project Manger' },
     ],
   },
