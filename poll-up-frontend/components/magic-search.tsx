@@ -16,6 +16,8 @@ import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/lib/routes';
 import React, { useState, useEffect } from 'react';
 import { Kbd } from '@nextui-org/kbd';
+import { useMutation } from '@tanstack/react-query';
+import { MagicSearchService } from '@/services/magic-search';
 
 export const useKeyboardShortcut = (callback: (e: KeyboardEvent) => void) => {
   useEffect(() => {
@@ -36,6 +38,20 @@ const MagicSearch = () => {
   const [prompt, setPrompt] = useState('');
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
+  const searchMutation = useMutation({
+    mutationFn: MagicSearchService.search,
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
+
+  const handleClick = () => {
+    const clenString = prompt?.replaceAll('\n', '');
+    const searchParams = new URLSearchParams({ prompt: clenString });
+    router.push(`${ROUTES.MAGIC_SEARCH}?${searchParams}`);
+    onClose();
+    searchMutation.mutate(clenString);
+  };
   const handleChangePrompt = (e: any) => {
     setPrompt(e.target.value);
   };
@@ -52,25 +68,26 @@ const MagicSearch = () => {
     }
   };
 
+  const onKeySubmit = (event: KeyboardEvent) => {
+    if (event.metaKey && event.key === 'Enter') {
+      handleClick();
+    }
+  };
+
   useKeyboardShortcut(onKeyOpen);
   useKeyboardShortcut(onKeyClose);
-  const handleClick = () => {
-    const clenString = prompt?.replaceAll('\n', '');
-    const searchParams = new URLSearchParams({ prompt: clenString });
-    router.push(`${ROUTES.MAGIC_SEARCH}?${searchParams}`);
-    onClose();
-  };
+  useKeyboardShortcut(onKeySubmit);
 
   return (
     <>
-      <div onClick={onOpen}>
+      <div onClick={onOpen} className=''>
         <Input
           classNames={{
             base: 'max-w-full sm:max-w-[10rem] h-10',
             mainWrapper: 'h-full',
-            input: 'text-small',
+            input: 'text-small !cursor-pointer caret-transparent',
             inputWrapper:
-              'h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20',
+              'h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20 !cursor-pointer',
           }}
           value=''
           placeholder='Get Secrets ...'
