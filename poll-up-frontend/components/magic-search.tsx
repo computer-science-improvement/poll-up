@@ -122,12 +122,12 @@ const MagicSearch = () => {
                   onChange={handleChangePrompt}
                 />
                 <Divider className='my-2' />
-                <Progress
-                  size='sm'
-                  isIndeterminate
-                  aria-label='Loading...'
-                  className='max-w-md'
-                />
+                {/*<Progress*/}
+                {/*  size='sm'*/}
+                {/*  isIndeterminate*/}
+                {/*  aria-label='Loading...'*/}
+                {/*  className='max-w-md'*/}
+                {/*/>*/}
               </ModalBody>
               <ModalFooter>
                 <Button color='danger' variant='light' onPress={onClose}>

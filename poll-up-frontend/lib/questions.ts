@@ -16,13 +16,19 @@ export type SelectQuestion = {
   answers: Answer[];
 };
 
-export type QuestionType = TextQuestion | SelectQuestion;
+export type QuestionMeta = 'initial' | 'patch';
+
+export type QuestionType = (TextQuestion | SelectQuestion) & {
+  meta?: QuestionMeta;
+  patchField?: string;
+};
 
 export const QUESTIONS: QuestionType[] = [
   {
     type: 'text',
     title: 'What is your name?',
     description: 'Please enter your full name',
+    meta: 'initial',
   },
   {
     type: 'text',
@@ -33,6 +39,8 @@ export const QUESTIONS: QuestionType[] = [
     type: 'text',
     title: 'What is your position?',
     description: 'Please enter your position',
+    meta: 'patch',
+    patchField: 'position',
   },
   {
     type: 'text',
@@ -66,6 +74,8 @@ export const QUESTIONS: QuestionType[] = [
       { value: 'Movies', label: 'Movies' },
       { value: 'Music', label: 'Music' },
     ],
+    meta: 'patch',
+    patchField: 'hobbies',
   },
   {
     type: 'text',
