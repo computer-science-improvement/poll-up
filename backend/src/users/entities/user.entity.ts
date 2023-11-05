@@ -31,4 +31,13 @@ export class User extends BaseEntity {
     eager: true,
   })
   userQuestions: UserQuestion[];
+
+  @Column({ nullable: true })
+  summary: string;
+
+  @Column({ nullable: true })
+  bio?: string;
+
+  @Column({ nullable: true })
+  fact?: string;
 }
