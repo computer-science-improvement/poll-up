@@ -14,13 +14,15 @@
     "@nextui-org/react": "^2.2.1",
     "apexcharts": "^3.44.0",
     "axios": "^1.6.0",
+    "@tanstack/react-query": "^5.7.0",
     "framer-motion": "^10.16.4",
     "lucide-react": "^0.292.0",
     "next": "14.0.1",
     "prettier": "^2.8.8",
     "react": "^18",
     "react-apexcharts": "^1.4.1",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.48.1"
   },
   "devDependencies": {
     "@types/node": "^20",

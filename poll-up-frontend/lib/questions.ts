@@ -1,10 +1,24 @@
-export type Question = {
+export type TextQuestion = {
+  type: 'text';
   title: string;
   description?: string;
-  type: 'text' | 'select';
 };
 
-export const QUESTIONS: Question[] = [
+export type Answer = {
+  value: string;
+  label: string;
+};
+
+export type SelectQuestion = {
+  type: 'select';
+  title: string;
+  description?: string;
+  answers: Answer[];
+};
+
+export type QuestionType = TextQuestion | SelectQuestion;
+
+export const QUESTIONS: QuestionType[] = [
   {
     type: 'text',
     title: 'What is your name?',
@@ -29,6 +43,29 @@ export const QUESTIONS: Question[] = [
     type: 'select',
     title: 'What is your Tech Stack?',
     description: 'Please select your Tech Stack',
+    answers: [
+      { value: 'React', label: 'React' },
+      { value: 'Vue', label: 'Vue' },
+      { value: 'Angular', label: 'Angular' },
+      { value: 'Svelte', label: 'Svelte' },
+      { value: 'Ember', label: 'Ember' },
+      { value: 'Backbone', label: 'Backbone' },
+      { value: 'Meteor', label: 'Meteor' },
+    ],
+  },
+  {
+    type: 'select',
+    title: 'What are your hobbies?',
+    description: 'Please select your hobbies',
+    answers: [
+      { value: 'Reading', label: 'Reading' },
+      { value: 'Writing', label: 'Writing' },
+      { value: 'Coding', label: 'Coding' },
+      { value: 'Gaming', label: 'Gaming' },
+      { value: 'Sports', label: 'Sports' },
+      { value: 'Movies', label: 'Movies' },
+      { value: 'Music', label: 'Music' },
+    ],
   },
   {
     type: 'text',
@@ -44,10 +81,5 @@ export const QUESTIONS: Question[] = [
     type: 'text',
     title: 'What is your type of character?',
     description: 'Please enter your type of character',
-  },
-  {
-    type: 'select',
-    title: 'What are your hobbies?',
-    description: 'Please select your hobbies',
   },
 ];

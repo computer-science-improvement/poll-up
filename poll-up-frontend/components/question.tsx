@@ -1,82 +1,51 @@
 'use client';
+
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+
 import { Button, Select, SelectItem } from '@nextui-org/react';
 import { Textarea } from '@nextui-org/input';
 
+import { Answer, QUESTIONS } from '@/lib/questions';
+
 type QuestionProps = {
+  id: number;
   title: string;
-  description: string;
-  answerType: 'text' | 'select';
+  description?: string;
+  type: 'text' | 'select';
+  answers?: Answer[];
 };
 
-export const animals = [
-  {
-    label: 'Cat',
-    value: 'cat',
-    description: 'The second most popular pet in the world',
-  },
-  {
-    label: 'Dog',
-    value: 'dog',
-    description: 'The most popular pet in the world',
-  },
-  {
-    label: 'Elephant',
-    value: 'elephant',
-    description: 'The largest land animal',
-  },
-  { label: 'Lion', value: 'lion', description: 'The king of the jungle' },
-  { label: 'Tiger', value: 'tiger', description: 'The largest cat species' },
-  {
-    label: 'Giraffe',
-    value: 'giraffe',
-    description: 'The tallest land animal',
-  },
-  {
-    label: 'Dolphin',
-    value: 'dolphin',
-    description: 'A widely distributed and diverse group of aquatic mammals',
-  },
-  {
-    label: 'Penguin',
-    value: 'penguin',
-    description: 'A group of aquatic flightless birds',
-  },
-  {
-    label: 'Zebra',
-    value: 'zebra',
-    description: 'A several species of African equids',
-  },
-  {
-    label: 'Shark',
-    value: 'shark',
-    description:
-      'A group of elasmobranch fish characterized by a cartilaginous skeleton',
-  },
-  {
-    label: 'Whale',
-    value: 'whale',
-    description: 'Diverse group of fully aquatic placental marine mammals',
-  },
-  {
-    label: 'Otter',
-    value: 'otter',
-    description: 'A carnivorous mammal in the subfamily Lutrinae',
-  },
-  {
-    label: 'Crocodile',
-    value: 'crocodile',
-    description: 'A large semiaquatic reptile',
-  },
-];
+type QuestionFormValues = {
+  answer: string;
+};
 
 export default function Question({
-  title = 'What do you need help with?',
-  description = "We're a full service agency with experts ready to help.",
-  answerType = 'text',
+  id,
+  title,
+  description,
+  type,
+  answers,
 }: QuestionProps) {
+  const router = useRouter();
+  const { register, handleSubmit, formState } = useForm<QuestionFormValues>({
+    defaultValues: {
+      answer: '',
+    },
+  });
+
+  const nextId = QUESTIONS.length - 1 === id ? 0 : id + 1;
+
+  const onSubmit = (data: QuestionFormValues) => {
+    console.log(data.answer);
+    router.push(`/pull-up/${nextId}`);
+  };
+
+  const isInvalid = formState.errors.answer;
+
   return (
-    <div>
+    <form onSubmit={handleSubmit(onSubmit)} className='w-full max-w-md'>
       <Image
         className='mb-10'
         priority
@@ -90,23 +59,29 @@ export default function Question({
         {description}
       </span>
 
-      <div className='max-w-md flex flex-col'>
-        {answerType === 'text' && (
+      <div className='w-full flex flex-col'>
+        {type === 'text' && (
           <Textarea
+            {...register('answer', { required: true })}
+            required
             variant='faded'
             label='Your Answer'
             placeholder='More passion, more power, more pull ups 🗿'
-            className='mb-6 max-w-md'
+            className='mb-6 w-full'
+            isInvalid={!!isInvalid}
           />
         )}
 
-        {answerType === 'select' && (
+        {type === 'select' && answers && (
           <Select
+            {...register('answer', { required: true })}
             variant='faded'
-            label='Select an animal'
-            className='mb-6 max-w-md'
+            label='Select'
+            selectionMode='multiple'
+            className='mb-6'
+            isInvalid={!!isInvalid}
           >
-            {animals.map((animal) => (
+            {answers.map((animal) => (
               <SelectItem key={animal.value} value={animal.value}>
                 {animal.label}
               </SelectItem>
@@ -114,10 +89,15 @@ export default function Question({
           </Select>
         )}
 
-        <Button className='self-end' color='primary' variant='shadow'>
+        <Button
+          type='submit'
+          className='self-end'
+          color='primary'
+          variant='shadow'
+        >
           Next question
         </Button>
       </div>
-    </div>
+    </form>
   );
 }

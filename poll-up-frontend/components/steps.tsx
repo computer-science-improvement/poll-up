@@ -9,13 +9,17 @@ const steps = QUESTIONS.map((question, index) => {
   };
 });
 
-export default function Steps() {
+type StepsProps = {
+  id: number;
+};
+
+export default function Steps({ id }: StepsProps) {
   return (
     <nav className='flex' aria-label='Progress'>
       <ol role='list' className='space-y-6'>
-        {steps.map((step) => (
+        {steps.map((step, index) => (
           <li key={step.name}>
-            {step.status === 'complete' ? (
+            {id > index ? (
               <div className='group'>
                 <span className='flex items-start'>
                   <span className='relative flex h-5 w-5 flex-shrink-0 items-center justify-center'>
@@ -29,7 +33,7 @@ export default function Steps() {
                   </span>
                 </span>
               </div>
-            ) : step.status === 'current' ? (
+            ) : id === index ? (
               <div className='flex items-start' aria-current='step'>
                 <span
                   className='relative flex h-5 w-5 flex-shrink-0 items-center justify-center'
