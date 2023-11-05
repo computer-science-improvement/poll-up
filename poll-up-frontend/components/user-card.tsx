@@ -14,7 +14,6 @@ import {
 import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/card';
 import { useQuery } from '@tanstack/react-query';
 import { MagicSearchService } from '@/services/magic-search';
-import { Textarea } from '@nextui-org/input';
 import React from 'react';
 
 type UserCardProps = {
@@ -31,7 +30,7 @@ const UserCard = (props: UserCardProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const query = useQuery({
-    queryKey: ['get-user-by-id', id],
+    queryKey: ['get-user-bio-by-id', id],
     queryFn: () => MagicSearchService.getBio(id),
     enabled: !!id && isOpen,
   });
@@ -55,7 +54,7 @@ const UserCard = (props: UserCardProps) => {
     <>
       <Card
         isBlurred
-        className='min-w-[340px] max-w-[440px] bg-success-100'
+        className='w-[400px] bg-success-100'
         style={{
           backgroundColor: cardColor,
         }}
@@ -99,7 +98,7 @@ const UserCard = (props: UserCardProps) => {
                     className='max-w-[800px]'
                   />
                 ) : (
-                  <div>{bio}</div>
+                  <pre>{bio}</pre>
                 )}
               </ModalBody>
               <ModalFooter></ModalFooter>
