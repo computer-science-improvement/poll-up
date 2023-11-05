@@ -2,6 +2,13 @@ import api from '@/lib/api';
 
 export const UserService = {
   BASE_URL: '/users',
+  me: async (id: string): Promise<any> => {
+    try {
+      return await api.get(`${UserService.BASE_URL}/${id}`);
+    } catch (e) {
+      console.error(e);
+    }
+  },
   init: async (name: string) => {
     try {
       const res = await api.post(UserService.BASE_URL, {
@@ -25,6 +32,13 @@ export const UserService = {
         id,
         ...data,
       });
+    } catch (e) {
+      console.error(e);
+    }
+  },
+  getQuestion: async (id: string) => {
+    try {
+      return await api.get(`${UserService.BASE_URL}/${id}/question`);
     } catch (e) {
       console.error(e);
     }

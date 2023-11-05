@@ -9,12 +9,13 @@ import { Textarea } from '@nextui-org/input';
 
 import { Answer, QuestionMeta, QUESTIONS } from '@/lib/questions';
 import { BASE_URL } from '@/lib/api';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { UserService } from '@/services/user';
 import { useUser } from '@/providers/user-provider';
 
 type QuestionProps = {
   id: number;
+  isAdditionalStep: boolean;
   data: {
     title: string;
     description?: string;
@@ -29,7 +30,11 @@ type QuestionFormValues = {
   answer: string;
 };
 
-export default function Question({ id, data: question }: QuestionProps) {
+export default function Question({
+  id,
+  data: question,
+  isAdditionalStep,
+}: QuestionProps) {
   const router = useRouter();
   const user = useUser();
 
@@ -48,17 +53,14 @@ export default function Question({ id, data: question }: QuestionProps) {
 
   const finalize = useMutation({
     mutationFn: UserService.finalize,
+    onSuccess: () => {
+      router.push('/bio');
+    },
   });
 
   const answerQuestion = useMutation({
     mutationFn: UserService.answerQuestion,
-    onSuccess: () => {
-      if (isLastQuestion) {
-        finalize.mutateAsync(String(user?.id));
-      } else {
-        goToNextQuestion();
-      }
-    },
+    onSuccess: () => goToNextQuestion(),
   });
 
   const { register, handleSubmit, formState } = useForm<QuestionFormValues>({
@@ -67,8 +69,10 @@ export default function Question({ id, data: question }: QuestionProps) {
     },
   });
 
-  const nextId = QUESTIONS.length - 1 === id ? 0 : id + 1;
-  const isLastQuestion = QUESTIONS.length - 1 === id;
+  const nextId = id + 1;
+  const handleFinalize = async () => {
+    await finalize.mutateAsync(String(user?.id));
+  };
 
   const goToNextQuestion = () => {
     router.push(`/pull-up/${nextId}`);
@@ -159,8 +163,19 @@ export default function Question({ id, data: question }: QuestionProps) {
           color='primary'
           variant='shadow'
         >
-          {isLastQuestion ? 'Finish' : 'Next question'}
+          Next question
         </Button>
+        {isAdditionalStep && (
+          <Button
+            type='button'
+            onClick={handleFinalize}
+            className='self-end'
+            color='primary'
+            variant='shadow'
+          >
+            Finish
+          </Button>
+        )}
       </div>
     </form>
   );
