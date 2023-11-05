@@ -3,6 +3,7 @@ import OpenAI from 'openai';
 import {User} from '../users/entities/user.entity';
 import {UserQuestion} from '../users/entities/user-question.entity';
 import {ChatCompletionMessageParam} from 'openai/resources';
+import {getRandomTopics} from "../utils/mock.helper";
 // @ts-nocheck
 
 require('dotenv').config();
@@ -17,9 +18,9 @@ export class OpenaiService {
 
   async generateNextQuestion(user: User): Promise<string> {
     const basicPrompt = `Ask the user a light-hearted, concrete interview-style question. Question's should be simple (max of 2 sentences) and make sure you only ask 1 question. 
-    Ensure that answers to previous questions is real. Ask clarifying question if needed.
-    Restrictions: question should be real, question should be about one specific theme
-    Preferred themes: user hobbies, career, pets.
+    Ensure that answers to previous questions is real. Ask clarifying question if needed. But do not ask more then 2 questions about the same topic.
+    Restrictions: question should be real, question should be about one specific theme.
+    Preferred topics: ${getRandomTopics()}
     Tone: friendly, approachable, stimulating, casual
      
     Please structure your reply as follows:
@@ -166,9 +167,7 @@ export class OpenaiService {
       const promptUser = {
         id: user.id,
         name: user.name,
-        age: user.age,
         hobbies: user.hobbies,
-        workExperience: user.experience,
         info: user.summary,
       };
       promptUsers.push(promptUser);
@@ -184,15 +183,15 @@ export class OpenaiService {
 
     messages.push({
       role: 'system',
-      content: `Return empty array if no one match needed criteria. Respond in json format with the following structure: "{"users":[{"id": [id of user that match criteria], "name": [name of user that match criteria], "reason": [reason why you think user is matched], "percentage": [percentage with that person matched criteria]}].`,
+      content: `Criteria means user have some relationship to the subject or question. Try to search synonyms if needed. Return empty array if no one match needed criteria. Respond in json format with the following structure: "{"users":[{"id": [id of user that match criteria], "name": [name of user that match criteria], "reason": [reason why you think user is matched], "percentage": [percentage with that person matched criteria]}].`,
     });
 
     console.log(messages);
 
     const chatCompletion = await this.openai.chat.completions.create({
       messages: messages,
-      model: 'gpt-3.5-turbo-16k',
-      temperature: 0.2,
+      model: 'gpt-4',
+      temperature: 1,
       n: 1,
     });
 
@@ -212,17 +211,11 @@ export class OpenaiService {
     if (!skip.includes('name')) {
       prompt += `name: ${user.name}, `;
     }
-    if (!skip.includes('age')) {
-      prompt += `age: ${user.age}, `;
-    }
     if (!skip.includes('position')) {
       prompt += `position: ${user.position}, `;
     }
     if (!skip.includes('hobbies')) {
       prompt += `hobbies: ${user.hobbies}, `;
-    }
-    if (!skip.includes('experience')) {
-      prompt += `experience: ${user.experience}, `;
     }
 
     if (answers) {
