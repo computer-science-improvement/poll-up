@@ -1,5 +1,6 @@
 import MagicSearch from '@/components/magic-search';
 import UserCard from '@/components/user-card';
+import { Cat3d } from '@/components/cat';
 
 type MagicSearchPageProps = {
   params: Record<string, string>;
@@ -15,7 +16,8 @@ export default function MagicSearchPage({
   return (
     <>
       {/*<MagicSearch />*/}
-      <UserCard />
+      {/*<UserCard />*/}
+      <Cat3d />
     </>
   );
 }

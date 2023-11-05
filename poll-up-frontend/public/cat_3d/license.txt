@@ -1,0 +1,8 @@
+Model Information:
+* title:	Cat Chubby
+* source:	https://sketchfab.com/3d-models/cat-chubby-034eb323f0dc4510b7db82f9b4a5b8fb
+* author:	JoseDiaz (https://sketchfab.com/JoseDiaz)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works
