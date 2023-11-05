@@ -91,8 +91,7 @@ export class UsersService {
 
   async generateUserSummary(user: User) {
     const summary = await this.openaiService.createUserSummary(user);
-    user.summary = summary;
-    await user.save();
+    await this.usersRepository.update({id: user.id}, {summary: summary})
   }
 
   async getUserFacts() {
@@ -115,14 +114,12 @@ export class UsersService {
     }
 
     const fact = await this.openaiService.createUserFact(user);
-    user.fact = fact;
-    await user.save();
+    await this.usersRepository.update({id: user.id}, {fact})
   }
 
   async generateQuestionSummary(answer: UserQuestion) {
     const summary = await this.openaiService.createQuestionSummary(answer);
-    answer.summary = summary;
-    await answer.save();
+    await this.userQuestionsRepo.update({id: answer.id}, {summary: summary})
   }
 
   async magicSearch(question) {
@@ -157,8 +154,8 @@ export class UsersService {
 
     if (!bio) {
       bio = await this.openaiService.getBio(user);
-      user.bio = bio;
-      await user.save();
+      await this.usersRepository.update({id: user.id}, {bio: bio})
+      await user.reload()
       this.generateUserFact(user)
     }
 

@@ -166,9 +166,7 @@ export class OpenaiService {
       const promptUser = {
         id: user.id,
         name: user.name,
-        age: user.age,
         hobbies: user.hobbies,
-        workExperience: user.experience,
         info: user.summary,
       };
       promptUsers.push(promptUser);
@@ -212,17 +210,11 @@ export class OpenaiService {
     if (!skip.includes('name')) {
       prompt += `name: ${user.name}, `;
     }
-    if (!skip.includes('age')) {
-      prompt += `age: ${user.age}, `;
-    }
     if (!skip.includes('position')) {
       prompt += `position: ${user.position}, `;
     }
     if (!skip.includes('hobbies')) {
       prompt += `hobbies: ${user.hobbies}, `;
-    }
-    if (!skip.includes('experience')) {
-      prompt += `experience: ${user.experience}, `;
     }
 
     if (answers) {
