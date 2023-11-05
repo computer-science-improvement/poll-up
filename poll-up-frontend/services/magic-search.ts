@@ -1,4 +1,4 @@
-import api from '@/lib/api';
+import api, { BASE_URL } from '@/lib/api';
 
 export const MagicSearchService = {
   BASE_URL: '/users/search',
