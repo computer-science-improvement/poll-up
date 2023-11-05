@@ -4,14 +4,16 @@ export const UserService = {
   BASE_URL: '/users',
   init: async (name: string) => {
     try {
-      return await api.get(UserService.BASE_URL, {
-        params: { name },
+      const res = await api.post(UserService.BASE_URL, {
+        name,
       });
+
+      return res;
     } catch (e) {
       console.error(e);
     }
   },
-  patch: ({
+  update: async ({
     id,
     data,
   }: {
@@ -19,14 +21,15 @@ export const UserService = {
     data: Record<string, string | number>;
   }) => {
     try {
-      return api.patch(`${UserService.BASE_URL}/${id}`, {
-        params: data,
+      return await api.patch(`${UserService.BASE_URL}/${id}`, {
+        id,
+        ...data,
       });
     } catch (e) {
       console.error(e);
     }
   },
-  answerQuestion: ({
+  answerQuestion: async ({
     id,
     data,
   }: {
@@ -37,9 +40,14 @@ export const UserService = {
     };
   }) => {
     try {
-      return api.post(`${UserService.BASE_URL}/${id}/answer`, {
-        params: data,
-      });
+      return await api.post(`${UserService.BASE_URL}/${id}/answer`, data);
+    } catch (e) {
+      console.error(e);
+    }
+  },
+  finalize: async (id: string) => {
+    try {
+      return await api.post(`${UserService.BASE_URL}/${id}/finalize`);
     } catch (e) {
       console.error(e);
     }

@@ -15,36 +15,51 @@ import { useUser } from '@/providers/user-provider';
 
 type QuestionProps = {
   id: number;
-  title: string;
-  description?: string;
-  type: 'text' | 'select';
-  answers?: Answer[];
-  meta?: QuestionMeta;
+  data: {
+    title: string;
+    description?: string;
+    type: 'text' | 'select';
+    answers?: Answer[];
+    meta?: QuestionMeta;
+    patchField?: string;
+  };
 };
 
 type QuestionFormValues = {
   answer: string;
 };
 
-export default function Question({
-  id,
-  title,
-  description,
-  type,
-  answers,
-  meta,
-}: QuestionProps) {
+export default function Question({ id, data: question }: QuestionProps) {
   const router = useRouter();
   const user = useUser();
 
   const initUser = useMutation({
     mutationFn: UserService.init,
     onSuccess: (data) => {
-      user?.setId(data.id);
+      user?.setId(data?.data.id);
+      goToNextQuestion();
     },
   });
 
-  console.log(user?.id);
+  const updateUser = useMutation({
+    mutationFn: UserService.update,
+    onSuccess: () => goToNextQuestion(),
+  });
+
+  const finalize = useMutation({
+    mutationFn: UserService.finalize,
+  });
+
+  const answerQuestion = useMutation({
+    mutationFn: UserService.answerQuestion,
+    onSuccess: () => {
+      if (isLastQuestion) {
+        finalize.mutateAsync(String(user?.id));
+      } else {
+        goToNextQuestion();
+      }
+    },
+  });
 
   const { register, handleSubmit, formState } = useForm<QuestionFormValues>({
     defaultValues: {
@@ -53,16 +68,40 @@ export default function Question({
   });
 
   const nextId = QUESTIONS.length - 1 === id ? 0 : id + 1;
+  const isLastQuestion = QUESTIONS.length - 1 === id;
+
+  const goToNextQuestion = () => {
+    router.push(`/pull-up/${nextId}`);
+  };
 
   const onSubmit = async (data: QuestionFormValues) => {
-    switch (meta) {
+    switch (question.meta) {
       case 'initial': {
         await initUser.mutateAsync(data.answer);
+        return;
+      }
+      case 'patch': {
+        if (question.patchField && user) {
+          await updateUser.mutateAsync({
+            id: String(user.id),
+            data: {
+              [question.patchField]: data.answer,
+            },
+          });
+        }
+        return;
       }
       default:
-        return null;
+        await answerQuestion.mutateAsync({
+          id: String(user?.id),
+          data: {
+            question: question.title,
+            answer: data.answer,
+          },
+        });
+        goToNextQuestion();
+        return;
     }
-    router.push(`/pull-up/${nextId}`);
   };
 
   const isInvalid = formState.errors.answer;
@@ -77,13 +116,15 @@ export default function Question({
         width={200}
         height={120}
       />
-      <p className='text-2xl font-semibold text-foreground mb-2'>{title}</p>
+      <p className='text-2xl font-semibold text-foreground mb-2'>
+        {question.title}
+      </p>
       <span className='text-foreground/60 inline-block mb-6'>
-        {description}
+        {question.description}
       </span>
 
       <div className='w-full flex flex-col'>
-        {type === 'text' && (
+        {question.type === 'text' && (
           <Textarea
             {...register('answer', { required: true })}
             required
@@ -95,7 +136,7 @@ export default function Question({
           />
         )}
 
-        {type === 'select' && answers && (
+        {question.type === 'select' && question.answers && (
           <Select
             {...register('answer', { required: true })}
             variant='faded'
@@ -104,7 +145,7 @@ export default function Question({
             className='mb-6'
             isInvalid={!!isInvalid}
           >
-            {answers.map((animal) => (
+            {question.answers.map((animal) => (
               <SelectItem key={animal.value} value={animal.value}>
                 {animal.label}
               </SelectItem>
@@ -118,7 +159,7 @@ export default function Question({
           color='primary'
           variant='shadow'
         >
-          Next question
+          {isLastQuestion ? 'Finish' : 'Next question'}
         </Button>
       </div>
     </form>

@@ -19,16 +19,7 @@ export default function PullUp({ params }: PullUpProps) {
         <Steps id={id} />
       </div>
       <div className='flex-1 flex justify-center'>
-        {question && (
-          <Question
-            id={id}
-            answers={question.type === 'select' ? question.answers : undefined}
-            type={question.type}
-            title={question.title}
-            description={question.description}
-            meta={question.meta}
-          />
-        )}
+        {question && <Question id={id} data={question} />}
       </div>
     </div>
   );
