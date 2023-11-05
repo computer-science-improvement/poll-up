@@ -98,7 +98,7 @@ const UserCard = (props: UserCardProps) => {
                     className='max-w-[800px]'
                   />
                 ) : (
-                  <pre>{bio}</pre>
+                  <p>{bio}</p>
                 )}
               </ModalBody>
               <ModalFooter></ModalFooter>
