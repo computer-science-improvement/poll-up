@@ -86,7 +86,7 @@ export default function MagicSearchPage({
                           </div>
                         </CardHeader>
                         <CardBody className='px-3 py-0 text-small text-default-400 max-h-[400px]'>
-                          <p>Fun fact: {factsData[order]?.fact}</p>
+                          <p>Information: {factsData[order]?.fact}</p>
                         </CardBody>
                         <CardFooter className='gap-3'></CardFooter>
                       </Card>
