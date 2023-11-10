@@ -36,6 +36,12 @@ const MagicSearch = () => {
   const [prompt, setPrompt] = useState('');
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
+  const handleClick = () => {
+    const clenString = prompt?.replaceAll('\n', '');
+    const searchParams = new URLSearchParams({ prompt: clenString });
+    router.push(`${ROUTES.MAGIC_SEARCH}?${searchParams}`);
+    onClose();
+  };
   const handleChangePrompt = (e: any) => {
     setPrompt(e.target.value);
   };
@@ -52,25 +58,26 @@ const MagicSearch = () => {
     }
   };
 
+  const onKeySubmit = (event: KeyboardEvent) => {
+    if (event.metaKey && event.key === 'Enter') {
+      handleClick();
+    }
+  };
+
   useKeyboardShortcut(onKeyOpen);
   useKeyboardShortcut(onKeyClose);
-  const handleClick = () => {
-    const clenString = prompt?.replaceAll('\n', '');
-    const searchParams = new URLSearchParams({ prompt: clenString });
-    router.push(`${ROUTES.MAGIC_SEARCH}?${searchParams}`);
-    onClose();
-  };
+  useKeyboardShortcut(onKeySubmit);
 
   return (
     <>
-      <div onClick={onOpen}>
+      <div onClick={onOpen} className=''>
         <Input
           classNames={{
-            base: 'max-w-full sm:max-w-[10rem] h-10',
+            base: 'max-w-full sm:max-w-md h-10',
             mainWrapper: 'h-full',
-            input: 'text-small',
+            input: 'text-small !cursor-pointer caret-transparent',
             inputWrapper:
-              'h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20',
+              'h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20 !cursor-pointer',
           }}
           value=''
           placeholder='Get Secrets ...'
@@ -115,12 +122,12 @@ const MagicSearch = () => {
                   onChange={handleChangePrompt}
                 />
                 <Divider className='my-2' />
-                <Progress
-                  size='sm'
-                  isIndeterminate
-                  aria-label='Loading...'
-                  className='max-w-md'
-                />
+                {/*<Progress*/}
+                {/*  size='sm'*/}
+                {/*  isIndeterminate*/}
+                {/*  aria-label='Loading...'*/}
+                {/*  className='max-w-md'*/}
+                {/*/>*/}
               </ModalBody>
               <ModalFooter>
                 <Button color='danger' variant='light' onPress={onClose}>

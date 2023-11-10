@@ -1,28 +1,24 @@
-import {ApiProperty} from "@nestjs/swagger";
-import {IsNumber, IsOptional, IsString} from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserDto {
-    @ApiProperty()
-    @IsNumber()
-    @IsOptional()
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  age: number;
 
-    age: number
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  experience: number;
 
-    @ApiProperty()
-    @IsNumber()
-    @IsOptional()
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  position: string;
 
-    experience: number
-
-    @ApiProperty()
-    @IsString()
-    @IsOptional()
-
-    position: string
-
-    @ApiProperty()
-    @IsString()
-    @IsOptional()
-
-    hobbies: string
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  hobbies: string;
 }

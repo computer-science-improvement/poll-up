@@ -15,16 +15,13 @@ export default function Nav() {
   return (
     <Navbar isBordered>
       <NavbarBrand>
-        <p className='font-bold text-inherit'>Poll up</p>
+        <Link color='foreground' href={ROUTES.HOME}>
+          Poll up
+        </Link>
       </NavbarBrand>
       <NavbarContent className='hidden sm:flex gap-4' justify='center'>
         <NavbarItem>
           <MagicSearch />
-        </NavbarItem>
-        <NavbarItem>
-          <Link color='foreground' href={ROUTES.HOME}>
-            Game
-          </Link>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify='end'>

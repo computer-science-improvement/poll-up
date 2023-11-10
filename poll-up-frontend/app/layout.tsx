@@ -26,7 +26,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body className={inter.className}>
         <Providers>
           <Nav />
-          <main>{children}</main>
+          <main className='min-h-[calc(100vh-186px)]'>{children}</main>
           <Footer />
         </Providers>
       </body>

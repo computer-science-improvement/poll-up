@@ -1,12 +1,12 @@
-import {IsString,} from 'class-validator';
-import {ApiProperty} from "@nestjs/swagger";
+import { IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateAnswerDto {
   @ApiProperty()
   @IsString()
-  question: string
+  question: string;
 
   @ApiProperty()
   @IsString()
-  answer: string
+  answer: string;
 }
