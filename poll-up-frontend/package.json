@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.1",
-    "@react-three/drei": "^9.88.11",
-    "@react-three/fiber": "^8.15.9",
-    "@types/three": "^0.158.1",
+    "@react-three/drei": "^9.13.2",
+    "@react-three/fiber": "^8.0.26",
+    "@types/three": "^0.141.0",
     "apexcharts": "^3.44.0",
     "axios": "^1.6.0",
     "@tanstack/react-query": "^5.7.0",
@@ -24,7 +24,7 @@
     "prettier": "^2.8.8",
     "react": "^18",
     "react-dom": "^18",
-    "three": "^0.158.0"
+    "three": "^0.141.0",
     "react-apexcharts": "^1.4.1",
     "react-hook-form": "^7.48.1"
   },

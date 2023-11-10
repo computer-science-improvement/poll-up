@@ -22,7 +22,7 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang='en' className='light'>
+    <html lang='en' className='dark'>
       <body className={inter.className}>
         <Providers>
           <Nav />

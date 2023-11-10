@@ -2,13 +2,14 @@
 import UserCard from '@/components/user-card';
 import { MagicSearchService } from '@/services/magic-search';
 import { useQuery } from '@tanstack/react-query';
-import { Progress, Divider, Avatar } from '@nextui-org/react';
+import { Progress, Avatar } from '@nextui-org/react';
 import React, { useEffect } from 'react';
 import { FactsService } from '@/services/facts';
-import { random } from 'nanoid';
 import { getRandom } from '@/lib/getRandom';
 import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/card';
 import { useUser } from '@/providers/user-provider';
+import Cat3d from '@/components/cat';
+import DonutChart from '@/components/donut-chart';
 
 type MagicSearchPageProps = {
   params: Record<string, string>;
@@ -116,8 +117,9 @@ export default function MagicSearchPage({
             )}
           </>
         )}
-        {/*<DonutChart />*/}
+        <DonutChart />
       </div>
+      <Cat3d />
     </div>
   );
 }
